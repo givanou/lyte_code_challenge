@@ -1,0 +1,30 @@
+# Use postgres/example user/password credentials
+version: '3.1'
+
+services:
+
+  db:
+    image: postgres:alpine
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: lyte
+      POSTGRES_USER: lyte
+      POSTGRES_DB: lyte
+    ports:
+      - 5432:5432
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+  web:
+    build: .
+    command: python src/manage.py runserver 0.0.0.0:8000
+    volumes:
+    - .:/src
+    ports:
+    - "8000:8000"
+    depends_on:
+    - db
